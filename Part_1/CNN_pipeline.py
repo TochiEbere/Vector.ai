@@ -34,6 +34,5 @@ class CnnPipeline:
 
     def model_accuracy(self):
         history = self.model_history
-        print(history.history)
         print('Train accuracy score is:', history.history['accuracy'][-1])    
         print('Test accuracy score is:', history.history['val_accuracy'][-1])    
