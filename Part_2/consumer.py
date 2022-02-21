@@ -5,7 +5,7 @@ currentdir = os.path.dirname(os.path.realpath(__file__))
 parentdir = os.path.dirname(currentdir)
 sys.path.append(parentdir)
 from utils import parse_args
-from .event_stream import KafkaStream, GooglePubsub
+from Part_2.event_stream import KafkaStream, GooglePubsub
 
 
 def consumer(broker_type, topic, gcp_creds=None, sub_id=None, project_id=None):
