@@ -1,15 +1,13 @@
+import os
+import sys
+
+currentdir = os.path.dirname(os.path.realpath(__file__))
+parentdir = os.path.dirname(currentdir)
+sys.path.append(parentdir)
 from utils import parse_args
 from event_stream import KafkaStream, GooglePubsub
 
 args = parse_args()
-
-BROKER_TYPE = args.broker_type
-TOPIC = args.topic_name
-IMAGE = args.image_path
-GCP_CREDS = args.gcp_credentials
-SUB_ID = args.subscription_id
-PROJECT_ID = args.project_id
-
 
 def producer(broker_type, topic, image, gcp_creds=None, project_id=None):
     if broker_type=='kafka':
@@ -20,5 +18,10 @@ def producer(broker_type, topic, image, gcp_creds=None, project_id=None):
         pub_sub = GooglePubsub(topic, gcp_creds)
         pub_sub.produce(project_id)
 
+BROKER_TYPE = args.broker_type
+TOPIC = args.topic_name
+IMAGE = args.image_path
+GCP_CREDS = args.gcp_credentials
+PROJECT_ID = args.project_id
 
-producer(broker_type=BROKER_TYPE, topic=TOPIC, image=IMAGE)
+producer(broker_type=BROKER_TYPE, topic=TOPIC, image=IMAGE, gcp_creds=GCP_CREDS, project_id=PROJECT_ID)

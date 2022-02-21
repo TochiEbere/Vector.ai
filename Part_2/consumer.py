@@ -1,16 +1,12 @@
-from utils import parse_args
-from event_stream import KafkaStream, GooglePubsub
+import os
 import sys
 
+currentdir = os.path.dirname(os.path.realpath(__file__))
+parentdir = os.path.dirname(currentdir)
+sys.path.append(parentdir)
+from utils import parse_args
+from .event_stream import KafkaStream, GooglePubsub
 
-args = parse_args()
-BROKER_TYPE = args.broker_type
-TOPIC = args.topic_name
-GCP_CREDS = args.gcp_credentials
-SUB_ID = args.subscription_id
-PROJECT_ID = args.project_id
-
-broker_type = BROKER_TYPE
 
 def consumer(broker_type, topic, gcp_creds=None, sub_id=None, project_id=None):
 
@@ -24,9 +20,11 @@ def consumer(broker_type, topic, gcp_creds=None, sub_id=None, project_id=None):
         result = pub_sub.consume(sub_id, project_id)
         return result
 
-# try:
-#     result = consumer(broker_type=BROKER_TYPE)
-# except KeyboardInterrupt:
-#     pass
+args = parse_args()
+BROKER_TYPE = args.broker_type
+GCP_CREDS = args.gcp_credentials
+PROJECT_ID = args.project_id
+SUB_ID = args.subscription_id
+TOPIC = args.topic_name
 
-# consumer(broker_type=BROKER_TYPE, topic='inference')
+result = consumer(broker_type=BROKER_TYPE, topic=TOPIC, gcp_creds=GCP_CREDS, sub_id=SUB_ID, project_id=PROJECT_ID)

@@ -1,13 +1,16 @@
-from utils import parse_args
 import json
-import tensorflow as tf
-from tensorflow.keras.models import load_model
-import tensorflow_datasets as tfds
-import numpy as np
+import os
 import sys
 
-sys.path.append('C:\\Users\\Best\\Documents\\VectorAI_Assessment')
+import tensorflow as tf
+import tensorflow_datasets as tfds
+import numpy as np
+from tensorflow.keras.models import load_model
 
+currentdir = os.path.dirname(os.path.realpath(__file__))
+parentdir = os.path.dirname(currentdir)
+sys.path.append(parentdir)
+from utils import parse_args
 from Part_2 import consumer
 
 
@@ -17,7 +20,7 @@ def main(model_path, target_size, data_source, label_path,
     model = load_model(model_path, compile = True)
 
     try:
-        img = consumer.consumer(broker_type, topic, gcp_creds=None, sub_id=None, project_id=None)
+        img = consumer.consumer(broker_type, topic, gcp_creds=gcp_creds, sub_id=sub_id, project_id=project_id)
     except KeyboardInterrupt:
         pass
 
@@ -28,7 +31,6 @@ def main(model_path, target_size, data_source, label_path,
 
     if data_source == 'fashion_mnist':
         class_labels = tfds.builder("fashion_mnist").info.features["label"]
-
         pred = model.predict(np_img)
         prediction = np.argmax(pred)
         label = class_labels.int2str(prediction)
@@ -61,6 +63,9 @@ if __name__ == "__main__":
         data_source=DATA_SOURCE, 
         label_path=LABEL_PATH, 
         broker_type=BROKER_TYPE, 
-        topic=TOPIC)
+        topic=TOPIC,
+        gcp_creds=GCP_CREDS,
+        sub_id=SUB_ID,
+        project_id=PROJECT_ID)
     
     print('Your image was predicted as', prediction)

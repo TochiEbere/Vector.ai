@@ -21,22 +21,14 @@ def parse_args():
                         default=10,
                         help='Number of epochs')
 
-    parser.add_argument('--target_size', type=int,
-                        default=28,
-                        help='Dimension to which input image will be resized')  
-
     parser.add_argument('--num_class', type=int,
                         default=10,
                         help='Number of classes') 
 
-    parser.add_argument('--model_path', type=str,
+    parser.add_argument('--model_name', type=str,
                         default='model',
-                        help='Path to save the model')
+                        help='Nmae to save the model as')
 
-
-    parser.add_argument('--image_path', type=str,
-                        help='Full path to image')
-    
     parser.add_argument('--labels', type=str,
                         default=None, help='Json file of labels')
 
@@ -46,12 +38,8 @@ def parse_args():
     parser.add_argument('--target_size', type=int,
                         default=28,
                         help='Dimension to which input image will be resized')  
-    
-    parser.add_argument('--data_source', type=str,
-                        default='fashion_mnist',
-                        help='Either fashion_mnist or custom')
 
-    parser.add_argument('--broker_type', type=int,
+    parser.add_argument('--broker_type', type=str,
                                 default='kafka', 
                                 help='Broker type to use. Options are kafka or googlepubsub')
 
