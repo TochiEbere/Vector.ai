@@ -3,12 +3,24 @@ from keras import layers, models
 class CnnPipeline:
 
     def __init__(self, train_data, test_data):
-         
+        """Initializes a CnnPipeline
+
+        Args:
+            train_data (tf data generator): train data
+            test_data (tf data generator): test data
+        """
         self.train_data = train_data
         self.test_data = test_data
         
     def model_architecture(self, target_size, num_class, optimizer, loss):            
-        
+        """Compiles a CNN architechure
+
+        Args:
+            target_size (int): target size to reshape input image to
+            num_class (int): number of classes in train data
+            optimizer (str): Optimization function
+            loss (tf object): Loss function
+        """
         INPUT_SHAPE = (target_size, target_size, 1)
         METRICS = ['accuracy']
 
@@ -25,6 +37,14 @@ class CnnPipeline:
         self.model_arch = model
 
     def train_CNNmodel(self, num_epoch):
+        """Trains a CNN classifier
+
+        Args:
+            num_epoch (int): Number of epochs
+
+        Returns:
+            cnn_model: A CNN classifier
+        """
         cnn_model = self.model_arch
         history = cnn_model.fit(self.train_data, epochs=num_epoch, 
                     validation_data=self.test_data)
@@ -33,6 +53,7 @@ class CnnPipeline:
         return cnn_model      
 
     def model_accuracy(self):
+        """Evaluates accuracy of the CNN model"""
         history = self.model_history
         print('Train accuracy score is:', history.history['accuracy'][-1])    
         print('Test accuracy score is:', history.history['val_accuracy'][-1])    

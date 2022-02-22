@@ -4,13 +4,18 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import tensorflow_datasets as tfds
 
 def parse_args():
+    """Command line arguments to be used for various scripts
+
+    Returns:
+        args: All defined command line arguments
+    """
 
     parser = argparse.ArgumentParser(
         description="Command line arguments", 
         allow_abbrev=False)
 
     parser.add_argument('--data_source', type=str,
-                        default='fashion_mnist',
+                        default='fashion_mnist', choices=['fashion_mnist','custom'],
                         help='Either fashion_mnist or custom')
 
     parser.add_argument('--data_dir', type=str,
@@ -25,9 +30,9 @@ def parse_args():
                         default=10,
                         help='Number of classes') 
 
-    parser.add_argument('--model_name', type=str,
+    parser.add_argument('--model_path', type=str,
                         default='model',
-                        help='Nmae to save the model as')
+                        help='Path to save the CNN model in')
 
     parser.add_argument('--labels', type=str,
                         default=None, help='Json file of labels')
@@ -40,32 +45,43 @@ def parse_args():
                         help='Dimension to which input image will be resized')  
 
     parser.add_argument('--broker_type', type=str,
-                                default='kafka', 
-                                help='Broker type to use. Options are kafka or googlepubsub')
+                        default='kafka', choices=['kafka', 'googelpubsub'],
+                        help='Broker type to use. Options are kafka or googlepubsub')
 
     parser.add_argument('--topic_name', type=str,
-                                help='Topic name')
+                        help='Topic name')
 
     parser.add_argument('--image_path', type=str,
-                                help='Full path to image file')
+                        help='Full path to image file')
 
     parser.add_argument('--gcp_credentials', type=str,
-                                default=None,help='Full path to GCP credentials')
+                        default=None,help='Full path to GCP credentials')
     
     parser.add_argument('--project_id', type=str,
-                                default=None, help='GCP service account project ID')
+                        default=None, help='GCP service account project ID')
 
     parser.add_argument('--subscription_id', type=str,
-                                default=None, help='Subscrition ID of Google Pubsub consumer')
+                        default=None, help='Subscrition ID of Google Pubsub consumer')
     
     args = parser.parse_args()
     return args
 
 
 def data_generator(source, data_dir=None, target_size=None):
+    """Generates data either from the in-built fashion mnist datadet or a custome data from a directory
+    
+    Args:
+        source (str): Specifies which data to tain on. Either of fashion_mnist or custom
+        data_dir (str): Directory to call train data from
+        target_size (str): Target size to reshape input image to
+
+    Returns:
+        train: A train data generator
+        test: A test data generator
+    """
 
     if source=='fashion_mnist':
-        # Load fashion mnist dataset
+        # Load in-built fashion mnist dataset
         print("""Loading fashion mnist data from tensorflow""")
         train, test = tfds.load(
             "fashion_mnist", 
